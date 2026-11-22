@@ -8,6 +8,7 @@ Read these before proposing changes, and use their terms exactly:
 - [`GLOSSARY-MAP.md`](GLOSSARY-MAP.md) — index of all three repos' glossaries and how they relate.
 - [`docs/adr/`](docs/adr/) — system-wide Architecture Decision Records.
 - [`docs/factory/SPEC.md`](docs/factory/SPEC.md) — the multi-repo design and scaffolding plan.
+- [`docs/factory/NEW-REPO-CHECKLIST.md`](docs/factory/NEW-REPO-CHECKLIST.md) — how to stand up a new factory child repo (labels, secrets, WIF, smoke test).
 
 ## Navigation pointers
 
