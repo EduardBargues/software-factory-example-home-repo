@@ -3,7 +3,7 @@
 - **Status:** Design agreed (grilling complete 2026-11-22). Scaffolding **not yet started** — awaiting authorization.
 - **Owner:** EduardBargues
 
-Extends the single-repo factory (`software-factory-example-python`) into a three-repo setup using the **home-repo pattern** (Matt Pocock, aihero.dev) plus the platform/product (infra/app) split that python ADR-0001 deferred.
+Extends the single-repo factory (`software-factory-example-python`) into a three-repo setup using a **home-repo hub** plus the platform/product (infra/app) split that python ADR-0001 deferred.
 
 ## 1. Goals
 
@@ -32,7 +32,7 @@ All three: **public**, personal account (`EduardBargues`), Claude-only (`CLAUDE.
 ## 4. Home repo mechanics
 
 - **Pointers** live in `CLAUDE.md`: name, purpose, local path, clone-from-remote fallback. No submodules.
-- **Shared skills**: first-party, in `.claude/skills/`. The former `humanlayer/show-me` becomes first-party (attribution dropped). `course-*` stay git-ignored.
+- **Shared skills**: first-party, in `.claude/skills/`. Any `course-*` skills stay git-ignored.
 - **`settings.json`**: versioned shared agent config (later iteration may expand this).
 - **No workflows.** The home repo never runs the factory.
 
@@ -56,7 +56,7 @@ All three: **public**, personal account (`EduardBargues`), Claude-only (`CLAUDE.
 ## 7. Scaffolding plan (phased — awaiting go-ahead)
 
 **Phase A — Home repo**
-1. `.claude/skills/` ← move all first-party shared skills; de-attribute `show-me`; `.gitignore` the `course-*`.
+1. `.claude/skills/` ← move all first-party shared skills; `.gitignore` the `course-*`.
 2. `settings.json` (shared config). `CLAUDE.md`, `GLOSSARY.md`, `GLOSSARY-MAP.md`, ADR-0001/0002 (✅ drafted).
 3. `git init`, first commit. (No GitHub push until authorized.)
 

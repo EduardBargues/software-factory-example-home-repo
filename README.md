@@ -1,6 +1,6 @@
 # software-factory-example-home-repo
 
-The **home repo** for a multi-repo software factory, following the [home-repo pattern](https://www.aihero.dev/the-home-repo-pattern). It is the hub that holds shared agent steering and points at the child repos; you run *interactive, cross-repo* agent sessions from here. It has **no CI** of its own.
+The **home repo** for a multi-repo software factory — the hub that holds shared agent steering and points at the child repos; you run *interactive, cross-repo* agent sessions from here. It has **no CI** of its own.
 
 ## What's here
 
