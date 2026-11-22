@@ -1,0 +1,18 @@
+# Matt Pocock course skills (behind pay-wall)
+.claude/skills/course-*
+
+# Local, machine-specific Claude config — never committed
+.claude/settings.local.json
+
+# Secrets — never commit (home repo holds no secrets by design)
+.env
+.env.*
+*.pem
+credentials
+aws.json
+
+# OS / editor
+.DS_Store
+*.swp
+.idea/
+.vscode/
