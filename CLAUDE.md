@@ -18,7 +18,7 @@ The repos this setup touches. Each is expected as a sibling directory; **clone f
 
 ## Shared skills
 
-First-party skills in `.claude/skills/` are the single source of truth for the whole setup. Child repos load them at CI time by checking out this repo at a pinned ref (see [`docs/adr/0002-skills-runtime-checkout.md`](docs/adr/0002-skills-runtime-checkout.md)); interactive sessions here use them directly. Paywalled `course-*` skills stay git-ignored.
+First-party skills in `.claude/skills/` are the single source of truth for the whole setup. Child repos load them at CI time by checking out this repo at a pinned ref (see [`docs/adr/0002-skills-runtime-checkout.md`](docs/adr/0002-skills-runtime-checkout.md)); interactive sessions here use them directly. Any `course-*` skills stay git-ignored.
 
 ## Working agreement
 

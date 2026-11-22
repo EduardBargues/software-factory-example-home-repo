@@ -27,4 +27,4 @@ Shared skills must stay in sync across repos (the whole point of the home repo).
 
 - Each child CI workflow gains a "load shared skills" step and a home-repo ref pin.
 - `skills-lock.json` changes meaning from external-provenance tracking to the home-repo ref pin; the former `humanlayer/show-me` skill becomes first-party in the home repo.
-- Paywalled `course-*` skills remain git-ignored everywhere and are not part of this flow (CI does not need them).
+- Any `course-*` skills remain git-ignored everywhere and are not part of this flow (CI does not need them).

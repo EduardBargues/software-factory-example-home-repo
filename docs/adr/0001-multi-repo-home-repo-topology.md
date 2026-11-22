@@ -6,7 +6,7 @@
 
 ## Situation
 
-The factory began as a single repo co-locating factory + app + infra (python ADR-0001), which explicitly deferred "graduate to a separate infra repo … consumed by the app repo" as a later factory exercise. We are now taking that graduation, and at the same time adopting Matt Pocock's **home-repo pattern** to keep shared agent steering (skills, docs, vocabulary) in sync across the growing set of repos.
+The factory began as a single repo co-locating factory + app + infra (python ADR-0001), which explicitly deferred "graduate to a separate infra repo … consumed by the app repo" as a later factory exercise. We are now taking that graduation, and at the same time adopting a **home-repo hub** to keep shared agent steering (skills, docs, vocabulary) in sync across the growing set of repos.
 
 ## Options
 
@@ -36,4 +36,4 @@ Each child keeps its own `CLAUDE.md`, `GLOSSARY.md`, `CODING_STANDARDS.md`, and 
 - The app↔infra change that python ADR-0001 kept atomic now spans two repos: an infra change ships as a tagged module release, then the app repo bumps its pinned `?ref=`. This ordering cost is the deliberate price of the platform/product boundary.
 - `FACTORY_PAT` and OIDC federation are now configured per child repo.
 - The home repo is CI-free; autonomous factory runs live only in the children.
-- Monorepo remains the better default *when feasible* (Pocock's own stance); the home repo is the chosen fallback here specifically to demonstrate the pattern and separate infra/app lifecycles.
+- Monorepo remains the better default *when feasible*; the home-repo hub is the chosen fallback here specifically to keep shared steering DRY and separate infra/app lifecycles.
