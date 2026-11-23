@@ -33,6 +33,7 @@ Canonical, repo-independent vocabulary for the factory. Shared across every repo
 ## Quality & control
 
 - **Brake** — a control that stops a bad change. Three brakes, cheapest to most expensive: automated check, automated review, human review.
+- **Accelerator** — a mechanism that raises throughput, used only once the brakes are trusted (*accelerate only once you can brake*): the explore→implement→review pipeline and its auto-chaining, the reusable workflows, `dev-setup`, and the trust ladder. _Counterpart of: brake._
 - **Automated check** — the first brake; deterministic. Fails the same way every time. Push every mechanizable rule down to this layer.
 - **Automated review** — the second brake; the `agent:review` run. Probabilistic (it is an agent).
 - **Human review** — the third brake; a person before the merge. The most expensive; use `/retro` to move its catches to a lower brake.
