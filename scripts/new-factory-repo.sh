@@ -187,7 +187,7 @@ EOF
 subst "$DEST_DIR/pyproject.toml"
 
 gen "src/@@PKG@@/__init__.py" <<'EOF'
-"""@@NAME@@ — scaffolded by new-factory-repo.sh. Replace with the real implementation."""
+"""Scaffold package — replace with the real implementation."""
 
 
 def healthcheck() -> bool:
