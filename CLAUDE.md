@@ -16,6 +16,7 @@ The repos this setup touches. Each is expected as a sibling directory; **clone f
 
 - **App (`software-factory-example-python`)**: Python app + its factory pipeline; owns the persistent AWS deploy. Path: `../software-factory-example-python`. Clone from `https://github.com/EduardBargues/software-factory-example-python.git` if missing.
 - **Terraform (`software-factory-example-terraform`)**: Terraform module library; exposes one public `modules/public/app`; owns no persistent infra. Path: `../software-factory-example-terraform`. Clone from `https://github.com/EduardBargues/software-factory-example-terraform.git` if missing.
+- **Grill-bot (`software-factory-example-grill-bot`)**: Slack grilling bot — convenes a `needs-a-human` ticket in a Slack thread, then runs grill → to-spec → to-tickets back into the factory ([`docs/adr/0005-slack-grilling-escalation.md`](docs/adr/0005-slack-grilling-escalation.md)). Path: `../software-factory-example-grill-bot`. Clone from `https://github.com/EduardBargues/software-factory-example-grill-bot.git` if missing.
 
 ## Shared skills
 
