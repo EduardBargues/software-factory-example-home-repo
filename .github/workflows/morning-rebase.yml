@@ -81,7 +81,11 @@ jobs:
             fi
 
             if git rebase "origin/$base"; then
-              git push --force-with-lease "$auth" "HEAD:refs/heads/$head" \
+              # Push to an inline auth URL (persist-credentials is off), so a bare
+              # --force-with-lease has no remote-tracking ref and fails "(stale info)".
+              # Give the lease the value we just fetched so it stays safe over a URL push.
+              exp="$(git rev-parse "origin/$head")"
+              git push --force-with-lease="refs/heads/$head:$exp" "$auth" "HEAD:refs/heads/$head" \
                 && echo "rebased #$pr ($head onto $base)"
             else
               git rebase --abort || true

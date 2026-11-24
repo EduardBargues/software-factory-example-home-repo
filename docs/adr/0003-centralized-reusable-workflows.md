@@ -39,11 +39,17 @@ the same problem the home-repo pattern already solves for *skills and docs*.
 
 ## Consequences
 
-- **Pin by tag, never `@main`.** Children pin the home repo at a release tag (e.g.
-  `v0.1.0`); an unpinned ref would let a home-repo edit rewrite every child's CI at once.
-  Bumping the tag is a reviewed PR per child — the same discipline as the
-  `skills-lock.json` ref. (There are now two home-repo pins per child: the workflow
-  tag, and the skills ref inside `skills-lock.json` — they may track the same tag.)
+- **Pin by a moving major tag, never `@main`.** Children pin the home repo at a
+  **moving major tag** (`@v0`), the actions-ecosystem convention (`actions/checkout@v4`):
+  a **backward-compatible** fix moves `v0` and every child inherits it with *no* child-side
+  change (fast rollout); a **breaking** change cuts `v1` and is adopted per child via PR
+  (gated rollout). Immutable point releases (`v0.1.1`) are kept for the record and for
+  `v0` to track. `@main` is **never** used — an unpinned ref would let any home-repo edit
+  rewrite every child's *privileged* CI (OIDC, the agent) at once, with no change visible
+  in the child and no reproducibility.
+- The other home-repo pin — the skills ref in `skills-lock.json` — stays a **SHA/point-tag**
+  bumped by reviewed PR; skills changes aren't covered by the workflow compatibility
+  contract, so they keep the tighter pin.
 - **Coupling / blast radius:** a bug in a shared workflow can affect all children;
   debugging spans two repos. Tag pinning bounds the blast radius.
 - Reusable workflows receive the **caller's** `github` context, so event fields and
