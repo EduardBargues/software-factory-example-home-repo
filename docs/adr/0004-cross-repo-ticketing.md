@@ -25,7 +25,7 @@ and work **across repos of the same owner** (keyed by global issue id; driven vi
 the CLI/API).
 
 - **Entry** — tickets are born in the **child repo** (the **app repo** by default; it carries the requirement, infra serves it). A one-off goes straight in and the factory auto-starts it; coordinated/cross-repo work goes through a **map**.
-- **Escalation** — when a ticket needs human thinking (`needs-a-human`), a **grilling/wayfinder session is launched from the hub's harness** (shared skills); it decomposes the work.
+- **Escalation** — when a ticket needs human thinking (`needs-a-human`), a **grilling/wayfinder session is launched from the hub's harness** (shared skills); it decomposes the work. (ADR-0005 refines *how*: the session is convened in Slack by the grill-bot, which writes the spec + tickets back automatically.)
 - **Coordination** — **native cross-repo sub-issues** (`gh issue create -R <repo> --parent <url>`) and **native cross-repo `blocked-by`** (`gh issue edit <blocked> --add-blocked-by <url>`), anchored on the originating app issue. The **Map**, when used, is a `wayfinder:map` issue in the **originating repo**, not the hub.
 - **Gating** — the factory respects a blocker via a **deterministic blocked-check in `explore`**: if the ticket has an open blocker, `explore` skips the agent run, comments the blockers, and does not auto-chain. When a blocker closes, a human **pulls the frontier** (re-applies `agent:explore`). (`auto-label` is left unchanged — it fires on `opened`, before edges exist, so a skip there would race; `explore` runs after edges are set and is the reliable gate.)
 - The **hub stays issue-free** — ADR-0001's "no issues here" rule is unchanged.

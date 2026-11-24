@@ -52,6 +52,12 @@ Canonical, repo-independent vocabulary for the factory. Shared across every repo
 - **Regression guard** — a test added with a bug fix. It stops the bug from returning.
 - **Data source** — a part of the agent environment it reads to verify its work: logs, a database, the UI, the issue tracker.
 
+## Escalation (Slack grilling)
+
+- **Grilling session** — a convened, multi-participant conversation in a Slack **thread** (within a human-provided channel) where humans and the agent grill a `needs-a-human` ticket to shared understanding, then synthesize a spec and tickets. Single-threaded, like a Claude Code session. Unlike a **run**, it *waits for humans*. See [`docs/adr/0005-slack-grilling-escalation.md`](docs/adr/0005-slack-grilling-escalation.md). _Avoid: chat._
+- **Grill-bot** — the always-on Fargate service (`software-factory-example-grill-bot`) that hosts grilling sessions over Slack Socket Mode and writes the result back to a child repo as factory-ready tickets. _Avoid: slackbot, agent service._
+- **Frontier (grilling)** — the set of decisions whose prerequisites are already settled, i.e. the questions askable *now*; the session ends when it is empty. (Distinct from the *ticket* frontier: startable, unblocked tickets.)
+
 ## Shared auth
 
 - **FACTORY_PAT** — the fine-grained, single-repo, expiring GitHub token a repo's tasks use to trigger downstream runs and open PRs (the built-in `GITHUB_TOKEN` can't). Scoped per repo.
