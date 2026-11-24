@@ -10,6 +10,7 @@ The **home repo** for a multi-repo software factory — the hub that holds share
 - [`GLOSSARY.md`](GLOSSARY.md) + [`GLOSSARY-MAP.md`](GLOSSARY-MAP.md) — shared factory vocabulary and the cross-repo index.
 - [`docs/adr/`](docs/adr/) — system-wide decisions. [`docs/factory/SPEC.md`](docs/factory/SPEC.md) — the overall design + scaffolding plan.
 - [`docs/factory/NEW-REPO-CHECKLIST.md`](docs/factory/NEW-REPO-CHECKLIST.md) — reusable steps to stand up a new factory repo (labels, secrets, WIF, smoke test).
+- [`scripts/new-factory-repo.sh`](scripts/new-factory-repo.sh) — automates that checklist's mechanical steps (scaffold, branch protection, labels); prints the secret/WIF steps.
 
 ## The repos
 
@@ -18,5 +19,6 @@ The **home repo** for a multi-repo software factory — the hub that holds share
 | `software-factory-example-home-repo` | this hub — shared skills, docs, config, pointers |
 | [`software-factory-example-python`](https://github.com/EduardBargues/software-factory-example-python) | the app + its factory; owns the persistent deploy |
 | [`software-factory-example-terraform`](https://github.com/EduardBargues/software-factory-example-terraform) | Terraform module library; exposes one public module |
+| [`software-factory-example-grill-bot`](https://github.com/EduardBargues/software-factory-example-grill-bot) | Slack grilling bot; escalates `needs-a-human` tickets to a Slack thread, then grill → to-spec → to-tickets ([ADR-0005](docs/adr/0005-slack-grilling-escalation.md)) |
 
 > This iteration is Claude-only (`CLAUDE.md`, not `AGENTS.md`). Child repos load these skills at CI time by checking out this repo at a pinned ref — see [`docs/adr/0002-skills-runtime-checkout.md`](docs/adr/0002-skills-runtime-checkout.md).
