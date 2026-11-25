@@ -37,12 +37,15 @@ tickets — not as prose a human then has to re-file.
 - **Per session** — the grilling runs **in a Slack thread, not a dedicated channel**: the bot
   **posts a session-opener message** to the target channel and conducts the whole session in
   **that message's thread** (single-threaded, like a Claude Code session; no channel is
-  created, and the bot must be a member of the channel). It **filters to threads it owns**
-  (`thread_ts`), ignoring other channel chatter. It clones the **hub** (skills, ADR-0002) +
-  the **originating repo** (context) and runs the `grilling` skill. Conversation is
-  **stateless per turn**: each inbound reply spins a fresh `claude -p` over the thread + the
-  issue — the **thread is the durable transcript**. Events are deduped by Slack `event_id`;
-  a **per-thread lock** prevents two quick replies from spawning racing turns.
+  created, and the bot must be a member of the channel). It **reacts only to `@mentions`
+  in the thread it owns** — never to the free discussion people have there — so a busy thread
+  stays quiet until someone **tags the bot** to submit an answer (the Slack app needs the
+  `app_mentions:read` scope + the `app_mention` event subscription). It clones the **hub**
+  (skills, ADR-0002) + the **originating repo** (context) and runs the `grilling` skill.
+  Conversation is **stateless per turn**: each mention spins a fresh `claude -p` over a
+  **filtered transcript** — the bot's own messages + the `@mention` messages, not the chatter —
+  plus the issue. Events are deduped by Slack `event_id`; a **per-thread lock** prevents two
+  quick mentions from spawning racing turns.
 - **Ending pipeline** — when the grilling **frontier is empty**, the bot runs `to-spec` then
   `to-tickets`, surfacing their two built-in human checkpoints **in the thread** (the spec
   *seam check*, then the ticket *breakdown quiz*). The **spec is published onto the original
