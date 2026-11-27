@@ -90,6 +90,7 @@ GENERIC=(
   "scripts/dev-setup.sh"
   "scripts/mint-factory-pat.sh"
   "scripts/check_file_size.py"
+  "scripts/check_test_conventions.py"
   ".pre-commit-config.yaml"
   ".editorconfig"
   ".gitattributes"
@@ -147,6 +148,7 @@ dev = [
     "bandit>=1.7",
     "pip-audit>=2.7",
     "pre-commit>=3.8",
+    "pytest-mock>=3.0",
 ]
 
 # Resolve from public PyPI, overriding any token-gated global index. Integrity is
@@ -170,7 +172,10 @@ target-version = "py312"
 src = ["src", "tests"]
 
 [tool.ruff.lint]
-select = ["E", "F", "I", "UP", "B", "SIM", "PL", "RUF"]
+select = ["E", "F", "I", "UP", "B", "SIM", "PL", "RUF", "TID"]
+
+[tool.ruff.lint.flake8-tidy-imports.banned-api]
+"unittest.mock".msg = "Create mocks with the pytest-mock `mocker` fixture; type hints via pytest_mock.MockType."
 
 [tool.mypy]
 python_version = "3.12"
@@ -189,10 +194,7 @@ subst "$DEST_DIR/pyproject.toml"
 gen "src/@@PKG@@/__init__.py" <<'EOF'
 """Scaffold package — replace with the real implementation."""
 
-
-def healthcheck() -> bool:
-    """A trivial seam so the brakes (mypy, pytest, coverage) have something to run."""
-    return True
+__version__ = "0.0.0"
 EOF
 # gen() substitutes nothing; fix the package dir name and placeholders now.
 if ! $DRY_RUN; then
@@ -200,14 +202,70 @@ if ! $DRY_RUN; then
   subst "$DEST_DIR/src/$PKG/__init__.py"
 fi
 
-gen "tests/test_smoke.py" <<'EOF'
-from @@PKG@@ import healthcheck
+gen "tests/__init__.py" </dev/null
+
+gen "tests/dsl.py" <<'EOF'
+"""Given / When / Then test DSL. A Scenario hides the mocks so tests speak only GLOSSARY terms.
+
+Tense by role: given → future, when → present, then → past. Add domain helpers to the
+given / when / then classes as the app grows; keep tests asserting only through `then`.
+"""
+
+from pytest_mock import MockerFixture
+
+import @@PKG@@
 
 
-def test_healthcheck() -> None:
-    assert healthcheck() is True
+class Scenario:
+    """Holds a test's mocks and state; only the DSL touches them, never a test body."""
+
+    def __init__(self, mocker: MockerFixture) -> None:
+        self.mocker = mocker
+        self.version = ""
+
+
+class _Given:
+    def the_package(self, scenario: Scenario) -> None:
+        """No arrangement needed — the package always exposes its version."""
+
+
+class _When:
+    def its_version_is_read(self, scenario: Scenario) -> None:
+        scenario.version = @@PKG@@.__version__
+
+
+class _Then:
+    def the_version_is(self, scenario: Scenario, expected: str) -> None:
+        assert scenario.version == expected
+
+
+given = _Given()
+when = _When()
+then = _Then()
 EOF
-subst "$DEST_DIR/tests/test_smoke.py"
+subst "$DEST_DIR/tests/dsl.py"
+
+gen "tests/conftest.py" <<'EOF'
+import pytest
+from pytest_mock import MockerFixture
+
+from tests.dsl import Scenario
+
+
+@pytest.fixture
+def scenario(mocker: MockerFixture) -> Scenario:
+    return Scenario(mocker)
+EOF
+
+gen "tests/test_version.py" <<'EOF'
+from tests.dsl import Scenario, given, then, when
+
+
+def test_when_reading_the_package_version(scenario: Scenario) -> None:
+    given.the_package(scenario)
+    when.its_version_is_read(scenario)
+    then.the_version_is(scenario, "0.0.0")
+EOF
 
 gen "CLAUDE.md" <<'EOF'
 # @@NAME@@
@@ -265,8 +323,12 @@ subst "$DEST_DIR/GLOSSARY.md"
 gen "CODING_STANDARDS.md" <<'EOF'
 # Coding standards
 
-Fuzzy rules the **review** brake enforces, for things no automated check can express.
-Grown and pruned via `/retro`. Empty to start.
+Conventions the factory enforces — some as automated **checks**, the rest by the **review**
+brake (for what no check can express). Grown and pruned via `/retro`.
+
+## Testing
+
+- **The test DSL speaks the domain** — the `given`/`when`/`then` helpers in [`tests/dsl.py`](tests/dsl.py) read in [`GLOSSARY.md`](GLOSSARY.md) vocabulary, conjugated by role: **given** future, **when** present, **then** past. *(The mechanical rules — `test_when_` naming, given/when/then usage, assert-only-via-`then`, mocks via pytest-mock — are enforced by `scripts/check_test_conventions.py` and ruff.)*
 EOF
 
 run mkdir -p "$DEST_DIR/docs/adr"
